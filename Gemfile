@@ -15,6 +15,8 @@ gem 'bcrypt', '~> 3.1'
 
 gem 'dotenv-rails', '~> 3.1'
 
+gem 'active_storage_validations'
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
 

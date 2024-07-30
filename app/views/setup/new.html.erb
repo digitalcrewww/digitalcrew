@@ -1,0 +1,30 @@
+<h1>Setup Your Virtual Airline</h1>
+
+<%= form_with(model: @user, url: setup_path, local: true, html: { multipart: true }) do |form| %>
+  <h2>Create Admin Account</h2>
+  <%= form.label :username %>
+  <%= form.text_field :username, required: true %>
+
+  <%= form.label :email %>
+  <%= form.email_field :email, required: true %>
+
+  <%= form.label :password %>
+  <%= form.password_field :password, required: true %>
+
+  <%= form.label :password_confirmation %>
+  <%= form.password_field :password_confirmation, required: true %>
+
+  <h2>Virtual Airline Details</h2>
+  <%= fields_for @setting do |setting_form| %>
+    <%= setting_form.label :airline_name %>
+    <%= setting_form.text_field :airline_name, required: true %>
+
+    <%= setting_form.label :callsign %>
+    <%= setting_form.text_field :callsign, required: true %>
+
+    <%= setting_form.label :logo %>
+    <%= setting_form.file_field :logo, accept: 'image/png,image/jpeg,image/gif' %>
+  <% end %>
+
+  <%= form.submit "Complete Setup" %>
+<% end %>
