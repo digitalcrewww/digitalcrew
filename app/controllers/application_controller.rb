@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user, :user_signed_in?
+  before_action :check_setup_status
 
   private
 
@@ -17,5 +18,9 @@ class ApplicationController < ActionController::Base
 
   def redirect_if_authenticated
     redirect_to root_path if user_signed_in?
+  end
+
+  def check_setup_status
+    redirect_to setup_path unless SetupStatusService.completed? || controller_name == 'setup'
   end
 end
