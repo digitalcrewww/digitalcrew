@@ -24,6 +24,8 @@ module Crewcenter
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    
+    config.session_store :cookie_store, key: '_crewcenter_session', expire_after: 2.weeks, secure: Rails.env.production?, httponly: true, same_site: :lax
 
     # SQLite optimizations
     config.after_initialize do

@@ -10,3 +10,9 @@ Style/Documentation:
 
 Metrics/MethodLength:
   Max: 15
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
