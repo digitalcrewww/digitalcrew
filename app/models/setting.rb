@@ -4,10 +4,17 @@ class Setting < ApplicationRecord
 
   validates :airline_name, presence: true, uniqueness: true
   validates :callsign, presence: true, uniqueness: true
-  validates :logo, attached: true, content_type: ['image/png', 'image/jpeg', 'image/gif'],
-                   size: { less_than: 5.megabytes }
+  validates :logo, content_type: ['image/png', 'image/jpeg', 'image/gif'],
+                   size: { less_than: 5.megabytes },
+                   if: :logo_attached?
 
   def self.instance
     first
+  end
+
+  private
+
+  def logo_attached?
+    logo.attached?
   end
 end

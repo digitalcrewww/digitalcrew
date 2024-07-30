@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SessionManager do # rubocop:disable Metrics/BlockLength
+RSpec.describe SessionManager do
   let(:user) { create(:user) }
   let(:request) { double('request', user_agent: 'Test User Agent') }
 

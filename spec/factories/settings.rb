@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :setting do
-    airline_name { "MyString" }
-    callsign { "MyString" }
-    owner { nil }
+    sequence(:airline_name) { |n| "Test Airline #{n}" }
+    sequence(:callsign) { |n| "TST#{n}" }
+    association :airline_owner, factory: :user
   end
 end
