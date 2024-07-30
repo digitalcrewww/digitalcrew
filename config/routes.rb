@@ -13,6 +13,6 @@ Rails.application.routes.draw do
   post 'setup', to: 'setup#create'
 
   namespace :admin do
-    resources :pilots, only: %i[index update]
+    resources :pilots, only: %i[index update destroy]
   end
 end

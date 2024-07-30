@@ -16,6 +16,7 @@
           <td><%= pilot.email %></td>
           <td>
             <%= button_to 'Accept', admin_pilot_path(pilot), method: :patch %>
+            <%= button_to 'Reject', admin_pilot_path(pilot), method: :delete %>
           </td>
         </tr>
       <% end %>
