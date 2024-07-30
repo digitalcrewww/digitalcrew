@@ -21,6 +21,6 @@ class ApplicationController < ActionController::Base
   end
 
   def check_setup_status
-    redirect_to setup_path unless Setting.exists? || controller_name == 'setup'
+    redirect_to setup_path unless SetupStatusService.completed? || controller_name == 'setup'
   end
 end

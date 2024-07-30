@@ -8,24 +8,24 @@ class SetupController < ApplicationController
   end
 
   def create
-    ActiveRecord::Base.transaction do
+    service = SetupService.new(user_params, setting_params)
+
+    if service.perform
+      create_session(service.user)
+      redirect_to root_path
+    else
       @user = User.new(user_params)
-      @user.save!
-
       @setting = Setting.new(setting_params)
-      @setting.airline_owner = @user
-      @setting.save!
-
-      session_cookie = SessionManager.create_session(@user, request)
-      cookies.signed[:session_id] = session_cookie
+      render :new, status: :unprocessable_entity
     end
-
-    redirect_to root_path
-  rescue ActiveRecord::RecordInvalid
-    render :new, status: :unprocessable_entity
   end
 
   private
+
+  def create_session(user)
+    session_cookie = SessionManager.create_session(user, request)
+    cookies.signed[:session_id] = session_cookie
+  end
 
   def user_params
     params.require(:user).permit(:username, :email, :password, :password_confirmation)
@@ -36,6 +36,6 @@ class SetupController < ApplicationController
   end
 
   def redirect_if_setup_completed
-    redirect_to root_path if Setting.exists?
+    redirect_to root_path if SetupStatusService.completed?
   end
 end
