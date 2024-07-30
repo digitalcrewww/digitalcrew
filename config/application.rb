@@ -1,6 +1,7 @@
-require_relative "boot"
+# rubocop:disable all
+require_relative 'boot'
 
-require "rails/all"
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -14,7 +15,7 @@ module Crewcenter
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w(assets tasks))
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -23,5 +24,13 @@ module Crewcenter
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # SQLite optimizations
+    config.after_initialize do
+      if ActiveRecord::Base.connection.adapter_name == 'SQLite'
+        ActiveRecord::Base.connection.execute('PRAGMA journal_mode=WAL;')
+        ActiveRecord::Base.connection.execute('PRAGMA cache_size=64000;')
+      end
+    end
   end
 end
