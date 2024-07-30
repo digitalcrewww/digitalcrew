@@ -1,5 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'is valid with valid attributes' do
+    user = User.new(username: 'testuser', email: 'test@example.com', password: 'password')
+    expect(user).to be_valid
+  end
+
+  it 'is not valid without a username' do
+    user = User.new(email: 'test@example.com', password: 'password')
+    expect(user).to_not be_valid
+  end
+
+  it 'is not valid without an email' do
+    user = User.new(username: 'testuser', password: 'password')
+    expect(user).to_not be_valid
+  end
+
+  it 'is not valid with a duplicate email' do
+    User.create(username: 'user1', email: 'test@example.com', password: 'password')
+    user2 = User.new(username: 'user2', email: 'test@example.com', password: 'password')
+    expect(user2).to_not be_valid
+  end
 end
