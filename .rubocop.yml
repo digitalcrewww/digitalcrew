@@ -16,3 +16,6 @@ Rails/I18nLocaleTexts:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
