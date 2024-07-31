@@ -8,6 +8,7 @@ class SetupService
     ActiveRecord::Base.transaction do
       create_user
       create_setting
+      seed_aircraft
       mark_setup_as_completed
       true
     end
@@ -20,11 +21,15 @@ class SetupService
   private
 
   def create_user
-    @user = User.create!(@user_params)
+    @user = User.create!(@user_params.merge(is_accepted: true))
   end
 
   def create_setting
     @setting = Setting.create!(@setting_params.merge(airline_owner: @user))
+  end
+
+  def seed_aircraft
+    AircraftSeederService.seed
   end
 
   def mark_setup_as_completed
