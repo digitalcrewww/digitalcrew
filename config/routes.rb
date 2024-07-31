@@ -14,5 +14,6 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :pilots, only: %i[index update destroy]
+    resources :fleet, only: %i[index create]
   end
 end
