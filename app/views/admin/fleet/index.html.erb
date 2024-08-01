@@ -28,22 +28,16 @@
     <% @fleet.each do |fleet_item| %>
       <tr>
         <td><%= fleet_item.aircraft.name %></td>
-        <td data-controller="inline-edit" data-id="<%= fleet_item.id %>">
-          <span data-inline-edit-target="display">
-            <%= fleet_item.livery %>
-          </span>
-          <input type="text" data-inline-edit-target="input" 
-                 value="<%= fleet_item.livery %>" 
-                 class="hidden">
-          <button data-inline-edit-target="editButton" data-action="click->inline-edit#showEdit">
-            Edit
-          </button>
-          <button data-inline-edit-target="saveButton" data-action="click->inline-edit#save" class="hidden">
-            Save
-          </button>
-          <button data-inline-edit-target="cancelButton" data-action="click->inline-edit#cancel" class="hidden">
-            Cancel
-          </button>
+        <td data-controller="inline-edit" 
+          data-inline-edit-update-url-value="/admin/fleet/:id" 
+          data-inline-edit-param-name-value="livery"
+          data-inline-edit-model-name-value="fleet"
+          data-id="<%= fleet_item.id %>">
+          <span data-inline-edit-target="display"><%= fleet_item.livery %></span>
+            <input type="text" data-inline-edit-target="input" value="<%= fleet_item.livery %>">
+              <button data-inline-edit-target="editButton" data-action="click->inline-edit#showEdit">Edit</button>
+              <button data-inline-edit-target="saveButton" data-action="click->inline-edit#save" style="display: none;">Save</button>
+              <button data-inline-edit-target="cancelButton" data-action="click->inline-edit#cancel" style="display: none;">Cancel</button>
         </td>
         <td>
           <%= button_to 'Delete', admin_fleet_path(fleet_item), method: :delete %>

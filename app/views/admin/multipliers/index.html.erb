@@ -1,0 +1,44 @@
+<h1>Multipliers</h1>
+<%= form_with(model: [:admin, Multiplier.new], url: admin_multipliers_path, local: true) do |form| %>
+  <div>
+    <%= form.label :name, 'Name' %>
+    <%= form.text_field :name %>
+  </div>
+  <div>
+    <%= form.label :value, 'Value' %>
+    <%= form.number_field :value, step: 0.1 %>
+  </div>
+  <%= form.submit 'Add Multiplier' %>
+<% end %>
+
+<h2>Multipliers List</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @multipliers.each do |multiplier| %>
+      <tr>
+        <td><%= multiplier.name %></td>
+        <td data-controller="inline-edit" 
+            data-inline-edit-update-url-value="/admin/multipliers/:id" 
+            data-inline-edit-param-name-value="value"
+            data-inline-edit-model-name-value="multiplier"
+            data-id="<%= multiplier.id %>">
+            <span data-inline-edit-target="display"><%= multiplier.value %></span>
+                <input type="number" data-inline-edit-target="input" value="<%= multiplier.value %>" step="0.1">
+                    <button data-inline-edit-target="editButton" data-action="click->inline-edit#showEdit">Edit</button>
+                    <button data-inline-edit-target="saveButton" data-action="click->inline-edit#save" style="display: none;">Save</button>
+                    <button data-inline-edit-target="cancelButton" data-action="click->inline-edit#cancel" style="display: none;">Cancel</button>
+        </td>
+        <td>
+          <%= button_to 'Delete', admin_multiplier_path(multiplier), method: :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
