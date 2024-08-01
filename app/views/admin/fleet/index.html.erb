@@ -1,0 +1,54 @@
+<h1>Fleet</h1>
+
+<%= form_with(model: [:admin, Fleet.new], url: admin_fleet_index_path, local: true) do |form| %>
+  <div>
+    <%= form.label :aircraft_id, 'Aircraft' %>
+    <%= form.collection_select :aircraft_id, Aircraft.all, :id, :name, prompt: 'Select an aircraft' %>
+  </div>
+
+  <div>
+    <%= form.label :livery, 'Livery' %>
+    <%= form.text_field :livery %>
+  </div>
+
+  <%= form.submit 'Add aircraft' %>
+<% end %>
+
+<h2>Airline Fleet</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Aircraft</th>
+      <th>Livery</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @fleet.each do |fleet_item| %>
+      <tr>
+        <td><%= fleet_item.aircraft.name %></td>
+        <td data-controller="inline-edit" data-id="<%= fleet_item.id %>">
+          <span data-inline-edit-target="display">
+            <%= fleet_item.livery %>
+          </span>
+          <input type="text" data-inline-edit-target="input" 
+                 value="<%= fleet_item.livery %>" 
+                 class="hidden">
+          <button data-inline-edit-target="editButton" data-action="click->inline-edit#showEdit">
+            Edit
+          </button>
+          <button data-inline-edit-target="saveButton" data-action="click->inline-edit#save" class="hidden">
+            Save
+          </button>
+          <button data-inline-edit-target="cancelButton" data-action="click->inline-edit#cancel" class="hidden">
+            Cancel
+          </button>
+        </td>
+        <td>
+          <%= button_to 'Delete', admin_fleet_path(fleet_item), method: :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
