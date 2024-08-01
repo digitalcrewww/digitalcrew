@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_01_085843) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_01_135343) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -44,6 +44,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_085843) do
     t.string "icao_code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["icao_code"], name: "index_aircrafts_on_icao_code", unique: true
+    t.index ["name"], name: "index_aircrafts_on_name", unique: true
   end
 
   create_table "fleets", force: :cascade do |t|
@@ -59,6 +61,27 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_085843) do
     t.float "value", default: 1.0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "pireps", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "flight_number", null: false
+    t.date "flight_date", null: false
+    t.string "departure_icao", null: false
+    t.string "arrival_icao", null: false
+    t.integer "flight_time_minutes", null: false
+    t.decimal "fuel_used", null: false
+    t.integer "cargo", null: false
+    t.integer "fleet_id", null: false
+    t.integer "multiplier_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arrival_icao"], name: "index_pireps_on_arrival_icao"
+    t.index ["departure_icao"], name: "index_pireps_on_departure_icao"
+    t.index ["fleet_id"], name: "index_pireps_on_fleet_id"
+    t.index ["flight_number"], name: "index_pireps_on_flight_number"
+    t.index ["multiplier_id"], name: "index_pireps_on_multiplier_id"
+    t.index ["user_id"], name: "index_pireps_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -87,6 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_085843) do
     t.string "username", null: false
     t.string "email", null: false
     t.string "password_digest", null: false
+    t.integer "flight_time", default: 0, null: false
     t.boolean "is_accepted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -97,6 +121,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_085843) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "fleets", "aircrafts"
+  add_foreign_key "pireps", "fleets"
+  add_foreign_key "pireps", "multipliers"
+  add_foreign_key "pireps", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "settings", "users", column: "owner_id"
 end
