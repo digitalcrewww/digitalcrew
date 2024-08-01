@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'dashboard#index'
 
-  # Authentification
+  # Authentication
   get '/signup', to: 'users#new'
   post '/signup', to: 'users#create'
   get '/login', to: 'sessions#new'
@@ -15,5 +15,6 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :pilots, only: %i[index update destroy]
     resources :fleet, only: %i[index create update destroy]
+    resources :multipliers, only: %i[index create update destroy]
   end
 end
