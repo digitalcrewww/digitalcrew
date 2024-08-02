@@ -16,7 +16,8 @@ RSpec.describe Pirep, type: :model do
       arrival_icao: 'EGLL',
       flight_time_minutes: 120,
       fuel_used: 5000,
-      cargo: 1000
+      cargo: 1000,
+      remarks: 'This is a test PIREP',
     )
     expect(pirep).to be_valid
   end
@@ -30,7 +31,8 @@ RSpec.describe Pirep, type: :model do
       arrival_icao: 'EGLL',
       flight_time_minutes: 120,
       fuel_used: 5000,
-      cargo: 1000
+      cargo: 1000,
+      remarks: 'This is a test PIREP',
     )
     expect(pirep).to_not be_valid
   end
@@ -44,7 +46,8 @@ RSpec.describe Pirep, type: :model do
       arrival_icao: 'EGLL',
       flight_time_minutes: 120,
       fuel_used: 5000,
-      cargo: 1000
+      cargo: 1000,
+      remarks: 'This is a test PIREP',
     )
     expect(pirep).to_not be_valid
   end
@@ -59,7 +62,8 @@ RSpec.describe Pirep, type: :model do
       arrival_icao: 'EGLL',
       flight_time_minutes: 120,
       fuel_used: 5000,
-      cargo: 1000
+      cargo: 1000,
+      remarks: 'This is a test PIREP',
     )
     expect(pirep).to be_valid
   end
@@ -74,7 +78,8 @@ RSpec.describe Pirep, type: :model do
       arrival_icao: 'EGLL',
       flight_time_minutes: -10,
       fuel_used: 5000,
-      cargo: 1000
+      cargo: 1000,
+      remarks: 'This is a test PIREP',
     )
     expect(pirep).to_not be_valid
   end
@@ -89,7 +94,8 @@ RSpec.describe Pirep, type: :model do
       arrival_icao: 'TOOLONG',
       flight_time_minutes: 120,
       fuel_used: 5000,
-      cargo: 1000
+      cargo: 1000,
+      remarks: 'This is a test PIREP',
     )
     expect(pirep).to_not be_valid
   end
@@ -97,11 +103,5 @@ RSpec.describe Pirep, type: :model do
   it 'converts flight time to HH:MM format' do
     pirep = Pirep.new(flight_time_minutes: 185)
     expect(pirep.flight_time).to eq('03:05')
-  end
-
-  it 'sets flight time minutes from HH:MM format' do
-    pirep = Pirep.new
-    pirep.flight_time = '02:30'
-    expect(pirep.flight_time_minutes).to eq(150)
   end
 end

@@ -15,6 +15,8 @@ class Pirep < ApplicationRecord
                                                       numericality: { greater_than_or_equal_to: 0, only_integer: true }
   validates :status, inclusion: { in: STATUSES }
 
+  validate :flight_date_not_in_future
+
   before_validation :calculate_flight_time_minutes, :upcase_icao_codes
   before_save :handle_flight_time_change, if: :will_save_change_to_status?
   before_destroy :handle_flight_time_change, if: -> { status == 'approved' }
@@ -34,6 +36,17 @@ class Pirep < ApplicationRecord
   def upcase_icao_codes
     self.departure_icao = departure_icao.upcase if departure_icao.present?
     self.arrival_icao = arrival_icao.upcase if arrival_icao.present?
+  end
+
+  def flight_date_not_in_future
+    return unless flight_date.present?
+
+    # Allow one day in the future for timezone differences between the user and the server (AU, NZ, etc.)
+    max_allowed_date = Time.current.in_time_zone('UTC').end_of_day + 1.day
+
+    if flight_date.in_time_zone('UTC') > max_allowed_date
+      errors.add(:flight_date, "can't be more than one day in the future")
+    end
   end
 
   def handle_flight_time_change
