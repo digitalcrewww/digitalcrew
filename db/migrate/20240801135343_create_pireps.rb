@@ -9,6 +9,8 @@ class CreatePireps < ActiveRecord::Migration[7.1]
       t.integer :flight_time_minutes, null: false
       t.decimal :fuel_used, null: false
       t.integer :cargo, null: false
+      t.string :remarks, limit: 500
+      t.string :status, default: 'pending'
       t.references :fleet, null: false, foreign_key: true, index: true
       t.references :multiplier, foreign_key: true, index: true
 

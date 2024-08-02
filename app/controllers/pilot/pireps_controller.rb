@@ -21,7 +21,7 @@ module Pilot
 
     def pirep_params
       params.require(:pirep).permit(:flight_number, :flight_date, :departure_icao, :arrival_icao,
-                                    :fuel_used, :cargo, :fleet_id, :multiplier_id, :flight_hours, :flight_minutes)
+                                    :fuel_used, :cargo, :fleet_id, :multiplier_id, :flight_hours, :flight_minutes, :remarks,:status)
     end
   end
 end
