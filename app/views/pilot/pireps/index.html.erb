@@ -1,0 +1,51 @@
+<h1>Submit PIREP</h1>
+
+<%= form_with(model: @pirep, url: pireps_path, local: true) do |form| %>
+  <div>
+    <%= form.label :fleet_id, "Aircraft" %>
+    <%= form.collection_select :fleet_id, @fleets, :id, :aircraft_name, prompt: "Select an aircraft" %>
+  </div>
+
+  <div>
+    <%= form.label :multiplier_id, "Multiplier" %>
+    <%= form.collection_select :multiplier_id, @multipliers, :id, :name, prompt: "Select a multiplier" %>
+  </div>
+
+  <div>
+    <%= form.label :flight_number %>
+    <%= form.text_field :flight_number %>
+  </div>
+
+  <div>
+    <%= form.label :flight_date %>
+    <%= form.date_field :flight_date %>
+  </div>
+
+  <div>
+    <%= form.label :departure_icao %>
+    <%= form.text_field :departure_icao %>
+  </div>
+
+  <div>
+    <%= form.label :arrival_icao %>
+    <%= form.text_field :arrival_icao %>
+  </div>
+
+  <div>
+    <%= form.label :flight_time, "Flight Time" %>
+    <%= form.number_field :flight_hours, min: 0, placeholder: "Hours" %>
+    <%= form.number_field :flight_minutes, min: 0, max: 59, placeholder: "Minutes" %>
+  </div>
+
+  <div>
+    <%= form.label :fuel_used %>
+    <%= form.number_field :fuel_used %>
+  </div>
+
+  <div>
+    <%= form.label :cargo %>
+    <%= form.number_field :cargo %>
+  </div>
+
+  <%= form.submit "Submit PIREP" %>
+<% end %>
