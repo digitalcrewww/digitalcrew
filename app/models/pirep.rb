@@ -52,6 +52,8 @@ class Pirep < ApplicationRecord
   def handle_flight_time_change
     if status_change == [nil, 'approved'] || status_change == ['pending', 'approved']
       user.increment!(:flight_time, flight_time_minutes)
+    elsif status_change == ['rejected', 'approved']
+      user.increment!(:flight_time, flight_time_minutes)
     elsif status_change == ['approved', 'pending'] || status_change == ['approved', 'rejected'] || destroyed?
       user.decrement!(:flight_time, flight_time_minutes)
     end
