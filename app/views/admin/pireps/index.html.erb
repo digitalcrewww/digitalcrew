@@ -1,0 +1,44 @@
+<h1>Admin PIREP Management</h1>
+
+<% %w[pending approved rejected].each do |status| %>
+  <h2><%= status.capitalize %> PIREPs</h2>
+  <% if @pireps[status].present? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Flight Number</th>
+          <th>Pilot</th>
+          <th>Date</th>
+          <th>Route</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pireps[status].each do |pirep| %>
+          <tr>
+            <td><%= pirep.flight_number %></td>
+            <td><%= pirep.user.username %></td>
+            <td><%= pirep.flight_date %></td>
+            <td><%= "#{pirep.departure_icao} - #{pirep.arrival_icao}" %></td>
+            <td>
+              <% case status %>
+              <% when 'pending' %>
+                <%= button_to 'Approve', approve_admin_pirep_path(pirep), method: :patch %>
+                <%= button_to 'Reject', reject_admin_pirep_path(pirep), method: :patch %>
+                <%= link_to 'View', admin_pirep_path(pirep) %>
+              <% when 'approved' %>
+                <%= button_to 'Reject', reject_admin_pirep_path(pirep), method: :patch %>
+                <%= link_to 'View', admin_pirep_path(pirep) %>
+              <% when 'rejected' %>
+                <%= button_to 'Approve', approve_admin_pirep_path(pirep), method: :patch %>
+                <%= link_to 'View', admin_pirep_path(pirep) %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No <%= status %> PIREPs.</p>
+  <% end %>
+<% end %>

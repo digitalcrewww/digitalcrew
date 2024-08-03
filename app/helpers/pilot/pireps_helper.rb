@@ -1,0 +1,2 @@
+module Pilot::PirepsHelper
+end

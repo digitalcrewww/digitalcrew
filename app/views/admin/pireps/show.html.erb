@@ -1,0 +1,20 @@
+<h1><%= @pirep.flight_number %></h1>
+
+<h1>Details</h1>
+<p><strong>Pilot:</strong> <%= @pirep.user.username %></p>
+<p><strong>Date:</strong> <%= @pirep.flight_date %></p>
+<p><strong>Route:</strong> <%= "#{@pirep.departure_icao} - #{@pirep.arrival_icao}" %></p>
+<p><strong>Aircraft:</strong> <%= @pirep.fleet.aircraft_name %></p>
+<p><strong>Flight Time:</strong> <%= @pirep.flight_time %></p>
+
+<h1>Status</h1>
+<p><strong>Status:</strong> <%= @pirep.status.capitalize %></p>
+
+<h1>Actions</h1>
+<%= button_to 'Approve', approve_admin_pirep_path(@pirep), method: :patch %>
+<%= button_to 'Reject', reject_admin_pirep_path(@pirep), method: :patch %>
+<%= button_to 'Delete', admin_pirep_path(@pirep), method: :delete %>
+
+<br>
+
+<%= link_to 'Back', admin_pireps_path %>
