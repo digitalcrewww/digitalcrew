@@ -31,11 +31,11 @@ class Pirep < ApplicationRecord
   end
 
   def approve!
-    update!(status: 'approved') if pending?
+    update!(status: 'approved')
   end
 
   def reject!
-    update!(status: 'rejected') if pending?
+    update!(status: 'rejected')
   end
 
   private
