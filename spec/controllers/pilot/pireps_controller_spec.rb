@@ -14,8 +14,8 @@ RSpec.describe Pilot::PirepsController, type: :controller do
       cargo: 1000,
       fleet_id: fleet.id,
       multiplier_id: multiplier.id,
-      flight_hours: 2,
-      flight_minutes: 30,
+      flight_hours: 1,
+      flight_minutes: 0,
       remarks: 'Test flight',
       status: 'pending'
     }
@@ -81,7 +81,7 @@ RSpec.describe Pilot::PirepsController, type: :controller do
         post :create, params: { pirep: attributes }
 
         created_pirep = Pirep.last
-        expect(created_pirep.flight_time_minutes).to eq(225) # (2 * 60 + 30) * 1.5 = 225
+        expect(created_pirep.flight_time_minutes).to eq(225) # (1 * 60) * 1.5 = 90
       end
     end
 

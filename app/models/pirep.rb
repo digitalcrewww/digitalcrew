@@ -9,8 +9,9 @@ class Pirep < ApplicationRecord
   attr_accessor :flight_hours, :flight_minutes
 
   validates :flight_number, :flight_date, :departure_icao, :arrival_icao, presence: true
-  validates :flight_time_minutes, :fuel_used, :cargo, presence: true,
-                                                      numericality: { greater_than_or_equal_to: 0, only_integer: true }
+  validates :flight_time_minutes, :fuel_used, :cargo,
+            presence: true,
+            numericality: { greater_than_or_equal_to: 0, only_integer: true }
   validates :status, inclusion: { in: STATUSES }
   validates :departure_icao, :arrival_icao, format: { with: ICAO_CODE_FORMAT }, length: { in: 3..4 }
 
@@ -18,7 +19,7 @@ class Pirep < ApplicationRecord
 
   before_validation :prepare_pirep_data
   before_create :apply_multiplier
-  after_save :update_user_flight_time, if: :saved_change_to_status?
+  before_destroy :remove_flight_time_from_user, if: :approved?
 
   scope :pending, -> { where(status: 'pending') }
   scope :approved, -> { where(status: 'approved') }
@@ -31,11 +32,19 @@ class Pirep < ApplicationRecord
   end
 
   def approve!
-    update!(status: 'approved')
+    transaction do
+      was_approved = approved?
+      update!(status: 'approved')
+      add_flight_time_to_user unless was_approved
+    end
   end
 
   def reject!
-    update!(status: 'rejected')
+    transaction do
+      was_approved = approved?
+      update!(status: 'rejected')
+      remove_flight_time_from_user if was_approved
+    end
   end
 
   private
@@ -76,18 +85,23 @@ class Pirep < ApplicationRecord
     errors.add(:flight_date, "can't be more than one day in the future")
   end
 
-  # Updates the user's total flight time when PIREP status changes
-  def update_user_flight_time
-    return unless user
-
-    if saved_change_to_status?(to: 'approved')
+  # Adds the flight time to the user's total flight time
+  def add_flight_time_to_user
+    user.with_lock do
       user.flight_time += flight_time_minutes
-    elsif saved_change_to_status?(from: 'approved', to: %w[pending rejected])
-      user.flight_time = [user.flight_time - flight_time_minutes, 0].max
+      user.save!
     end
+  end
 
-    user.save
-  rescue StandardError => e
-    Rails.logger.error "Failed to update user flight time for PIREP ##{id}: #{e.message}"
+  # Removes the flight time from the user's total flight time
+  def remove_flight_time_from_user
+    user.with_lock do
+      user.flight_time = [user.flight_time - flight_time_minutes, 0].max
+      user.save!
+    end
+  end
+
+  def approved?
+    status == 'approved'
   end
 end
