@@ -10,11 +10,13 @@ module Admin
     def show; end
 
     def approve
-      update_status('approved')
+      @pirep.approve!
+      redirect_to admin_pireps_path
     end
 
     def reject
-      update_status('rejected')
+      @pirep.reject!
+      redirect_to admin_pireps_path
     end
 
     def destroy
@@ -26,11 +28,6 @@ module Admin
 
     def set_pirep
       @pirep = Pirep.find(params[:id])
-    end
-
-    def update_status(new_status)
-      @pirep.update(status: new_status)
-      redirect_to admin_pireps_path
     end
   end
 end
