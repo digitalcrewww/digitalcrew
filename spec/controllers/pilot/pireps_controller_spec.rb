@@ -69,6 +69,20 @@ RSpec.describe Pilot::PirepsController, type: :controller do
         post :create, params: { pirep: valid_attributes }
         expect(response).to redirect_to(pireps_path)
       end
+
+      it 'applies the multiplier correctly' do
+        multiplier = create(:multiplier, value: 1.5)
+        attributes = valid_attributes.merge(
+          flight_hours: 2,
+          flight_minutes: 30,
+          multiplier_id: multiplier.id
+        )
+
+        post :create, params: { pirep: attributes }
+
+        created_pirep = Pirep.last
+        expect(created_pirep.flight_time_minutes).to eq(225) # (2 * 60 + 30) * 1.5 = 225
+      end
     end
 
     context 'with invalid params' do
