@@ -70,7 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_135343) do
     t.string "departure_icao", null: false
     t.string "arrival_icao", null: false
     t.integer "flight_time_minutes", null: false
-    t.decimal "fuel_used", null: false
+    t.integer "fuel_used", null: false
     t.integer "cargo", null: false
     t.string "remarks", limit: 500
     t.string "status", default: "pending"

@@ -18,5 +18,11 @@ Rails.application.routes.draw do
     resources :pilots, only: %i[index update destroy]
     resources :fleet, only: %i[index create update destroy]
     resources :multipliers, only: %i[index create update destroy]
+    resources :pireps, only: %i[index show destroy] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
   end
 end
