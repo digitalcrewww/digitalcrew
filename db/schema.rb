@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_01_135343) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_04_094519) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -56,6 +56,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_135343) do
     t.index ["aircraft_id"], name: "index_fleets_on_aircraft_id"
   end
 
+  create_table "fleets_routes", id: false, force: :cascade do |t|
+    t.integer "route_id", null: false
+    t.integer "fleet_id", null: false
+    t.index ["fleet_id", "route_id"], name: "index_fleets_routes_on_fleet_id_and_route_id"
+    t.index ["route_id", "fleet_id"], name: "index_fleets_routes_on_route_id_and_fleet_id", unique: true
+  end
+
   create_table "multipliers", force: :cascade do |t|
     t.string "name", null: false
     t.float "value", default: 1.0, null: false
@@ -84,6 +91,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_135343) do
     t.index ["flight_number"], name: "index_pireps_on_flight_number"
     t.index ["multiplier_id"], name: "index_pireps_on_multiplier_id"
     t.index ["user_id"], name: "index_pireps_on_user_id"
+  end
+
+  create_table "routes", force: :cascade do |t|
+    t.string "flight_number", null: false
+    t.string "departure_icao", null: false
+    t.string "arrival_icao", null: false
+    t.integer "duration", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["departure_icao", "arrival_icao"], name: "index_routes_on_departure_icao_and_arrival_icao"
+    t.index ["flight_number"], name: "index_routes_on_flight_number", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|
